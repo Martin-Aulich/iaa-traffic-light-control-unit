@@ -13,27 +13,27 @@ import (
 )
 
 const (
-	host = "localhost"
-	port = "55554"
+	host     = "localhost"
+	port     = "55554"
 	protocol = "tcp"
+
+	tfAddr = "172.17.208.1:4223"
+	tfUid  = "VRg"
 )
-
-
-const ADDR string = "localhost:4223"
-const UID string = "VRg"
 
 func main() {
 	ipcon := ipconnection.New()
 	defer ipcon.Close()
-	rgbledv2Bricklet, _ := rgb_led_v2_bricklet.New(UID, &ipcon) // Create device object.
+	rgbledv2Bricklet, _ := rgb_led_v2_bricklet.New(tfUid, &ipcon) // Create device object.
 
-	err := ipcon.Connect(ADDR) // Connect to brickd.
+	err := ipcon.Connect(tfAddr) // Connect to brickd.
 	if err != nil {
 		log.Fatal("Can't connect to LED Bricklet", err)
 	}
 	defer ipcon.Disconnect()
 
 	// Flash LED on startup
+	time.Sleep(3 * time.Second)
 	rgbledv2Bricklet.SetRGBValue(255, 255, 255)
 	time.Sleep(3 * time.Second)
 	rgbledv2Bricklet.SetRGBValue(0, 0, 0)
@@ -70,7 +70,7 @@ func handleConnection(conn net.Conn, bricklet rgb_led_v2_bricklet.RGBLEDV2Brickl
 
 	if msg == "4" {
 		log.Println("Traffic light: red")
-		bricklet.SetRGBValue(255,0,0)
+		bricklet.SetRGBValue(255, 0, 0)
 		conn.Write([]byte("red\n"))
 	} else if msg == "1" {
 		log.Println("Traffic light: green")
