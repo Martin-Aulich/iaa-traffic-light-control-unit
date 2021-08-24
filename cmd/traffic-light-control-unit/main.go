@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"github.com/Tinkerforge/go-api-bindings/ipconnection"
 	"github.com/Tinkerforge/go-api-bindings/rgb_led_v2_bricklet"
-	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -58,8 +57,9 @@ func main() {
 }
 
 func handleConnection(conn net.Conn, bricklet rgb_led_v2_bricklet.RGBLEDV2Bricklet) {
+	buffer, err := bufio.NewReader(conn).ReadByte()
 	//buffer, err := bufio.NewReader(conn).ReadBytes('\n')
-	buffer, err := ioutil.ReadAll(bufio.NewReader(conn))
+	//buffer, err := ioutil.ReadAll(bufio.NewReader(conn))
 
 	if err != nil {
 		log.Println("Client left")
@@ -67,7 +67,7 @@ func handleConnection(conn net.Conn, bricklet rgb_led_v2_bricklet.RGBLEDV2Brickl
 		return
 	}
 
-	msg := strings.TrimSpace(string(buffer[:len(buffer)-1]))
+	msg := strings.TrimSpace(string(buffer))
 	log.Println("Message: " + msg)
 
 	if msg == "4" {
