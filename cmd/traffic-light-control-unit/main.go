@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	host     = "0.0.0.0"
+	host     = ""
 	port     = "55554"
 	protocol = "tcp"
 
