@@ -80,6 +80,10 @@ func handleConnection(conn net.Conn, bricklet rgb_led_v2_bricklet.RGBLEDV2Brickl
 		log.Println("Traffic light: yellow")
 		bricklet.SetRGBValue(255, 255, 0)
 		conn.Write([]byte("yellow\n"))
+	} else if msg == "0" {
+		log.Println("Traffic light: off")
+		bricklet.SetRGBValue(0, 0, 0)
+		conn.Write([]byte("off\n"))
 	}
 
 	handleConnection(conn, bricklet)
