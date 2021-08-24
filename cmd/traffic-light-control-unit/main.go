@@ -28,7 +28,7 @@ func main() {
 
 	err := ipcon.Connect(tfAddr) // Connect to brickd.
 	if err != nil {
-		log.Fatal("Can't connect to LED Bricklet", err)
+		log.Fatal("Can't connect to LED Bricklet!", err)
 	}
 	defer ipcon.Disconnect()
 
