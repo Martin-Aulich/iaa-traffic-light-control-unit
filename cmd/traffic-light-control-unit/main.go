@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"github.com/Tinkerforge/go-api-bindings/ipconnection"
 	"github.com/Tinkerforge/go-api-bindings/rgb_led_v2_bricklet"
 	"log"
@@ -28,7 +27,7 @@ func main() {
 
 	err := ipcon.Connect(tfAddr) // Connect to brickd.
 	if err != nil {
-		log.Fatal("Can't connect to LED Bricklet!", err)
+		log.Fatal("Can't connect to LED Bricklet", err)
 	}
 	defer ipcon.Disconnect()
 
@@ -49,7 +48,7 @@ func main() {
 	for {
 		c, err := listener.Accept()
 		if err != nil {
-			fmt.Println("Error connecting:", err.Error())
+			log.Println("Error connecting:", err.Error())
 			return
 		}
 		log.Println("Client " + c.RemoteAddr().String() + " connected.")
