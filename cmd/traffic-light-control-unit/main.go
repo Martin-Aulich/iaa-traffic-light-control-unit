@@ -66,6 +66,7 @@ func handleConnection(conn net.Conn, bricklet rgb_led_v2_bricklet.RGBLEDV2Brickl
 	}
 
 	msg := strings.TrimSpace(string(buffer[:len(buffer)-1]))
+	log.Println("Message: " + msg)
 
 	if msg == "4" {
 		log.Println("Traffic light: red")
