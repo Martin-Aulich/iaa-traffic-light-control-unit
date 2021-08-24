@@ -17,7 +17,7 @@ const (
 	port     = "55554"
 	protocol = "tcp"
 
-	tfAddr = "172.17.208.1:4223"
+	tfAddr = "localhost:4223"
 	tfUid  = "VRg"
 )
 
