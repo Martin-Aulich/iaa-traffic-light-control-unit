@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"github.com/Tinkerforge/go-api-bindings/ipconnection"
 	"github.com/Tinkerforge/go-api-bindings/rgb_led_v2_bricklet"
+	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -57,7 +58,8 @@ func main() {
 }
 
 func handleConnection(conn net.Conn, bricklet rgb_led_v2_bricklet.RGBLEDV2Bricklet) {
-	buffer, err := bufio.NewReader(conn).ReadBytes('\n')
+	//buffer, err := bufio.NewReader(conn).ReadBytes('\n')
+	buffer, err := ioutil.ReadAll(bufio.NewReader(conn))
 
 	if err != nil {
 		log.Println("Client left")
@@ -71,19 +73,19 @@ func handleConnection(conn net.Conn, bricklet rgb_led_v2_bricklet.RGBLEDV2Brickl
 	if msg == "4" {
 		log.Println("Traffic light: red")
 		bricklet.SetRGBValue(255, 0, 0)
-		conn.Write([]byte("red\n"))
+		conn.Write([]byte("\nred\n"))
 	} else if msg == "1" {
 		log.Println("Traffic light: green")
 		bricklet.SetRGBValue(0, 255, 0)
-		conn.Write([]byte("green\n"))
+		conn.Write([]byte("\ngreen\n"))
 	} else if msg == "2" {
 		log.Println("Traffic light: yellow")
 		bricklet.SetRGBValue(255, 255, 0)
-		conn.Write([]byte("yellow\n"))
+		conn.Write([]byte("\nyellow\n"))
 	} else if msg == "0" {
 		log.Println("Traffic light: off")
 		bricklet.SetRGBValue(0, 0, 0)
-		conn.Write([]byte("off\n"))
+		conn.Write([]byte("\noff\n"))
 	}
 
 	handleConnection(conn, bricklet)
