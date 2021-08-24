@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/Tinkerforge/go-api-bindings/ipconnection"
 	"github.com/Tinkerforge/go-api-bindings/rgb_led_v2_bricklet"
+	"github.com/stianeikeland/go-rpio/v4"
 	"log"
 	"net"
 	"os"
@@ -21,6 +22,12 @@ const (
 	tfUid  = "VRg"
 )
 
+var (
+	redPin    rpio.Pin
+	greenPin  rpio.Pin
+	yellowPin rpio.Pin
+)
+
 func main() {
 	ipcon := ipconnection.New()
 	defer ipcon.Close()
@@ -31,6 +38,20 @@ func main() {
 		log.Fatal("Can't connect to LED Bricklet!", err)
 	}
 	defer ipcon.Disconnect()
+
+	err = rpio.Open()
+	if err != nil {
+		log.Fatal("Can't connect to GPIO", err)
+	}
+	redPin = rpio.Pin(21)
+	redPin.Output()
+	redPin.Low()
+	greenPin = rpio.Pin(16)
+	greenPin.Output()
+	greenPin.Low()
+	yellowPin = rpio.Pin(20)
+	yellowPin.Output()
+	yellowPin.Low()
 
 	// Flash LED on startup
 	time.Sleep(3 * time.Second)
@@ -71,18 +92,30 @@ func handleConnection(conn net.Conn, bricklet rgb_led_v2_bricklet.RGBLEDV2Brickl
 	if msg == "4" {
 		log.Println("Traffic light: red")
 		bricklet.SetRGBValue(255, 0, 0)
+		redPin.High()
+		greenPin.Low()
+		yellowPin.Low()
 		conn.Write([]byte("red\n"))
 	} else if msg == "1" {
 		log.Println("Traffic light: green")
 		bricklet.SetRGBValue(0, 255, 0)
+		greenPin.High()
+		yellowPin.Low()
+		redPin.Low()
 		conn.Write([]byte("green\n"))
 	} else if msg == "2" {
 		log.Println("Traffic light: yellow")
 		bricklet.SetRGBValue(255, 255, 0)
+		yellowPin.High()
+		greenPin.Low()
+		redPin.Low()
 		conn.Write([]byte("yellow\n"))
 	} else if msg == "0" {
 		log.Println("Traffic light: off")
 		bricklet.SetRGBValue(0, 0, 0)
+		greenPin.Low()
+		redPin.Low()
+		yellowPin.Low()
 		conn.Write([]byte("off\n"))
 	}
 
