@@ -61,7 +61,7 @@ func handleConnection(conn net.Conn, bricklet rgb_led_v2_bricklet.RGBLEDV2Brickl
 	buffer, err := bufio.NewReader(conn).ReadBytes('\n')
 
 	if err != nil {
-		log.Println("Client left.")
+		log.Println("Client left")
 		conn.Close()
 		return
 	}
